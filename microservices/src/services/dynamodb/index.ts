@@ -1,4 +1,4 @@
-import DynamoDB from 'aws-sdk/clients/DynamoDB'
+import DynamoDB from 'aws-sdk/clients/dynamodb'
 
 export class DDB {
     private _service = new DynamoDB.DocumentClient()
