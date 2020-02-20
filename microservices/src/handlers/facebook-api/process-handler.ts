@@ -1,5 +1,6 @@
 import { CommonUtils } from '../../common/utils/common-utils'
 import { DDB } from '../../services/dynamodb' 
+import AWSUtil from 'aws-sdk/lib/util';
 
 const { TABLE_NAME } = process.env;
 
@@ -21,6 +22,13 @@ export class ProcessHandler {
             Item: DDB.marshall(data)
         }
         return params
+    }
+
+    private generateUUID(data) {
+        return {
+            data,
+            prospect_id: AWSUtil.uuid.v4()
+        }
     }
 
     private async putItem(params) {
@@ -66,7 +74,8 @@ export class ProcessHandler {
 
         const parseBody = JSON.parse(this.events.body)
         const transformedData = this.transform(parseBody);
-        const params = this.putParams(transformedData);
+        const validData = this.generateUUID(transformedData)
+        const params = this.putParams(validData);
         const data = await this.putItem(params);
 
         return data;

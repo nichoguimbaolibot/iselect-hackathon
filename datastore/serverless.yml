@@ -17,7 +17,7 @@ resources:
       Properties:
         AttributeDefinitions:
           - AttributeName: prospect_id
-            AttributeType: "N"
+            AttributeType: "S"
         KeySchema:
           - AttributeName: prospect_id
             KeyType: HASH
