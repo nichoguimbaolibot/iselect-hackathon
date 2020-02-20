@@ -1,5 +1,5 @@
 {
-  "name": "serverless-boilerplate",
+  "name": "iselect-hackathon",
   "version": "1.1.0",
   "description": "A Node.js starter for the Serverless Framework with async/await and unit test support",
   "main": "handlers/handler.ts",
@@ -13,28 +13,46 @@
     "deploy:production": "sls deploy --stage production",
     "deploy:dit": "sls deploy --stage dit"
   },
-  "author": "maheel.desilva@iselect.com.au",
+  "author": "team enter prize",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iselect-services/serverless-boilerplate.git"
+    "url": "https://github.com/nichoguimbaolibot/iselect-hackathon.git"
   },
   "dependencies": {},
   "devDependencies": {
+    "@s88d-puppy/sls-appsync-offline": "^1.0.2",
     "@types/aws-lambda": "^8.10.31",
     "@types/aws-sdk": "^2.7.0",
-    "@types/node": "^13.7.4",
-    "aws-lambda": "^0.1.2",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
     "aws-sdk": "^2.528.0",
+    "aws-sdk-mock": "^5.0.0",
     "dotenv": "^8.2.0",
     "dotenv-override": "^5.0.1",
-    "nodemon": "^1.19.1",
+    "husky": "^3.0.5",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.2.5",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.18.2",
     "serverless-bundle": "^1.2.2",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-dynamodb-local": "0.2.35",
+    "serverless-jest-plugin": "^0.2.1",
+    "serverless-offline": "^5.3.3",
+    "serverless-plugin-bind-deployment-id": "^1.1.0",
+    "serverless-plugin-ifelse": "^1.0.5",
+    "serverless-plugin-stage-variables": "^1.9.5",
+    "serverless-plugin-tracing": "^2.0.0",
     "serverless-plugin-typescript": "1.1.7",
+    "serverless-plugin-warmup": "^4.7.0-rc.1",
     "ts-jest": "^24.1.0",
     "ts-loader": "^6.0.4",
     "tslint": "^5.18.0",
+    "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "@types/nodemailer": "^6.4.0",
+    "nodemailer": "^6.4.2"
   }
 }

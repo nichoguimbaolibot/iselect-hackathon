@@ -1,6 +1,7 @@
+import { CommonUtils } from '../../common/utils/common-utils'
 import { DDB } from '../../services/dynamodb' 
 
-const { DYNAMODB_TABLE } = process.env;
+const { TABLE_NAME } = process.env;
 
 export class ProcessHandler {
     constructor(private _events) {}
@@ -16,7 +17,7 @@ export class ProcessHandler {
 
     private putParams (data) {
         const params = {
-            TableName: DYNAMODB_TABLE,
+            TableName: TABLE_NAME,
             Item: DDB.marshall(data)
         }
         return params
@@ -40,18 +41,35 @@ export class ProcessHandler {
         }
     }
 
+    private transform (data) {
+        let object: any = {}
+        Object.values(data).forEach((data1: any) => {
+            const keys = Object.keys(data1).map(item => item)
+            keys.forEach(item2 => {
+                object = {
+                    ...object,
+                    [`${item2}`]: data1[item2]
+                }
+            })
+        })
+
+        return object
+    }
+
     public async execute() {
-        console.log('EVENTS', this.events)
-        // // const params = this.putParams();
-
-        // const put = await this.putItem(params);
-
-        // return put;
-
-        return {
-            statusCode: 200,
-            body: this.events
+        if (!CommonUtils.isJsonParseable(this.events.body)) {
+            return {
+                statusCode: 500,
+                body: 'Invalid JSON data.'
+            }
         }
+
+        const parseBody = JSON.parse(this.events.body)
+        const transformedData = this.transform(parseBody);
+        const params = this.putParams(transformedData);
+        const data = await this.putItem(params);
+
+        return data;
     }
 
     

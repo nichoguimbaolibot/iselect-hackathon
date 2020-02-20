@@ -6,6 +6,7 @@ microservices/.serverless
 microservices/.build
 microservices/node_modules
 microservices/package-lock.json
+microservices/yarn-lock.json
 microservices/events
 microservices/coverage
 microservices/.env

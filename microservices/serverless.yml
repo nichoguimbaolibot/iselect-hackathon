@@ -28,6 +28,8 @@ functions:
             origin: '*'
             headers:
               - Content-Type
+    environment:
+      TABLE_NAME: iselect-hackathon-datastore-${opt:stage}-table
     package:
       include:
         - src/**
