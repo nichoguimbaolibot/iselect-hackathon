@@ -13,7 +13,7 @@ export class ProcessHandler {
     }
 
     private ddb () {
-        
+
         return new DDB();
     }
 
@@ -37,11 +37,11 @@ export class ProcessHandler {
     private async putItem(params) {
         try {
     
-            const data = await this.ddb().putItem(params)
+            await this.ddb().putItem(params)
     
             return {
                 statusCode: 200,
-                data,
+                data: params,
             }
         } catch (error) {
     
