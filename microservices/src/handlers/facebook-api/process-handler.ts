@@ -13,21 +13,24 @@ export class ProcessHandler {
     }
 
     private ddb () {
+        
         return new DDB();
     }
 
     private putParams (data) {
         const params = {
             TableName: TABLE_NAME,
-            Item: DDB.marshall(data)
+            Item: data
         }
+
         return params
     }
 
     private generateUUID(data) {
+        const uuid = AWSUtil.uuid.v4()
         return {
-            data,
-            prospect_id: AWSUtil.uuid.v4()
+            ...data,
+            prospect_id: uuid
         }
     }
 
