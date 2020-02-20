@@ -12,6 +12,11 @@ custom:
 
 resources:
   Resources:
+    BillUploadS3:
+      Type: "AWS::S3::Bucket"
+      Properties:
+        BucketName: ${self:service}-${opt:stage}-s3
+
     DynamoDb:
       Type: AWS::DynamoDB::Table
       Properties:

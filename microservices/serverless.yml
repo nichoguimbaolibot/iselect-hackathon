@@ -7,6 +7,9 @@ provider:
   region: ap-southeast-2
   stackName: ${self:service.name}-${opt:stage}
 
+custom:
+  BUCKET_S3: iselect-hackathon-datastore-${opt:stage}-s3
+
 package:
   individually: true
   exclude:
@@ -17,7 +20,7 @@ plugins:
 
 functions:
   FacebookAPILambda:
-    handler: src/handlers/facebook-api/handler.facebookAPI
+    handler: src/handlers/facebook-api/handler.handleFacebookAPI
     name: ${self:service.name}-${opt:stage}-facebook-api
     role: FacebookAPIRole
     events:
@@ -30,6 +33,24 @@ functions:
               - Content-Type
     environment:
       TABLE_NAME: iselect-hackathon-datastore-${opt:stage}-table
+    package:
+      include:
+        - src/**
+
+  BillUploadToS3:
+    handler: src/handlers/bill-upload-api/handler.handleBillUploadToS3
+    name: ${self:service.name}-${opt:stage}-bill-upload-api
+    role: BillUploadToS3Role
+    environment:
+      BUCKET_S3: ${self:custom.BUCKET_S3}
+    events:
+      - http:
+          path: prospects/bill-upload
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
     package:
       include:
         - src/**
@@ -68,3 +89,46 @@ resources:
                   - dynamodb:UpdateItem
                 Resource:
                   - ${cf:iselect-hackathon-datastore-${opt:stage}.DynamoDbArn}
+
+    BillUploadToS3Role:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+        Path: /
+        PermissionsBoundary: !ImportValue security-iam::PermissionsBoundaryBuilderManagedPolicy
+        Policies:
+          - PolicyName: bill-upload-api-policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:Put
+                  - dynamodb:UpdateItem
+                Resource:
+                  - ${cf:iselect-hackathon-datastore-${opt:stage}.DynamoDbArn}
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:ListBucket
+                  - s3:DeleteObject
+                  - s3:GetObject
+                  - s3:selectObjectContent
+                Resource:
+                  - 'arn:aws:s3:::${self:custom.BUCKET_S3}'
+                  - 'arn:aws:s3:::${self:custom.BUCKET_S3}/*'
