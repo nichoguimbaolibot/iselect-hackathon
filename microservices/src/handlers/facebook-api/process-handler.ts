@@ -41,7 +41,7 @@ export class ProcessHandler {
     
             return {
                 statusCode: 200,
-                data: params,
+                data: params.Item,
             }
         } catch (error) {
     
