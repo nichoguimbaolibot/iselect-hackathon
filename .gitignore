@@ -1,2 +1,11 @@
+.serverless
 node_modules
+datastore/node_modules
+datastore/.serverless
+microservices/.serverless
+microservices/.build
 microservices/node_modules
+microservices/package-lock.json
+microservices/events
+microservices/coverage
+microservices/.env

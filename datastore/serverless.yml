@@ -41,4 +41,3 @@ resources:
         "Fn::GetAtt": [ DynamoDb, Arn ]
       Export:
         Name: ${self:provider.stackName}::DynamoDbTable-Arn
-   
