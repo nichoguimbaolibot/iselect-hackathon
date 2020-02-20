@@ -41,9 +41,4 @@ resources:
         "Fn::GetAtt": [ DynamoDb, Arn ]
       Export:
         Name: ${self:provider.stackName}::DynamoDbTable-Arn
-    MailerLambdaLayer:
-      Value:
-        Ref: MailerLambdaLayer
-    ArchiverLambdaLayer:
-      Value:
-        Ref: ArchiverLambdaLayer
+   
