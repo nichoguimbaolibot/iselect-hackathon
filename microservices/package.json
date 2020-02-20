@@ -1,0 +1,41 @@
+{
+    "name": "serverless-boilerplate",
+    "version": "1.1.0",
+    "description": "A Node.js starter for the Serverless Framework with async/await and unit test support",
+    "main": "handlers/handler.ts",
+    "scripts": {
+      "start": "rm -rf .build && tsc && node -r dotenv/config run.js",
+      "lint": "tslint -p tsconfig.json -c tslint.json **/*.ts",
+      "test": "jest",
+      "clean": "rm -Rf build",
+      "deploy:dev": "rm -rf .build/ && sls deploy",
+      "offline": "rm -Rf .build/ && rm -Rf .serverless/ && sls offline start --stage local",
+      "deploy:production": "sls deploy --stage production",
+      "deploy:dit": "sls deploy --stage dit"
+    },
+    "author": "maheel.desilva@iselect.com.au",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/iselect-services/serverless-boilerplate.git"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "@types/aws-lambda": "^8.10.31",
+      "@types/aws-sdk": "^2.7.0",
+      "dotenv": "^8.2.0",
+      "dotenv-override": "^5.0.1",
+      "@types/node": "^12.7.5",
+      "aws-lambda": "^0.1.2",
+      "aws-sdk": "^2.528.0",
+      "nodemon": "^1.19.1",
+      "serverless-bundle": "^1.2.2",
+      "serverless-plugin-typescript": "1.1.7",
+      "ts-jest": "^24.1.0",
+      "ts-loader": "^6.0.4",
+      "tslint": "^5.18.0",
+      "tslint-config-prettier": "^1.18.0",
+      "typescript": "^3.6.3"
+    }
+  }
+  

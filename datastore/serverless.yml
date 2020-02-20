@@ -1,0 +1,49 @@
+service: iselect-hackathon-datastore
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage}
+  region: ap-southeast-2
+  stackName: ${self:service}-${opt:stage}
+
+custom:
+  ddbname: ${self:service}-${opt:stage}-table
+
+resources:
+  Resources:
+    DynamoDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: prospect_id
+            AttributeType: "N"
+        KeySchema:
+          - AttributeName: prospect_id
+            KeyType: HASH
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+        BillingMode: PAY_PER_REQUEST
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
+        Tags:
+          - Key: Billing
+            Value: iSelect
+        TableName: ${self:custom.ddbname}
+  Outputs:
+    DynamoDbStreamArn:
+      Value:
+        "Fn::GetAtt": [ DynamoDb, StreamArn ]
+      Export:
+        Name: ${self:provider.stackName}::DynamoDbTable-StreamArn
+    DynamoDbArn:
+      Value:
+        "Fn::GetAtt": [ DynamoDb, Arn ]
+      Export:
+        Name: ${self:provider.stackName}::DynamoDbTable-Arn
+    MailerLambdaLayer:
+      Value:
+        Ref: MailerLambdaLayer
+    ArchiverLambdaLayer:
+      Value:
+        Ref: ArchiverLambdaLayer

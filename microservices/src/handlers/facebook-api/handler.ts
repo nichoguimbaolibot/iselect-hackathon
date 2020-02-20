@@ -1,0 +1,9 @@
+import { ProcessHandler } from './process-handler'
+
+export const facebookAPI = async (events) => {
+    const process = new ProcessHandler(events)
+    
+    const data = await process.execute();
+
+    return data
+}

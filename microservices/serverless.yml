@@ -1,0 +1,78 @@
+service:
+  name: iselect-hackathon-microservices
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: ap-southeast-2
+  stackName: ${self:service.name}-${opt:stage}
+
+package:
+  individually: true
+  exclude:
+    - ./**
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  FacebookAPILambda:
+    handler: src/handlers/facebook-api/handler.facebookAPI
+    name: ${self:service.name}-${opt:stage}-facebook-api
+    role: FacebookAPIRole
+    events:
+      - http:
+          path: leadsbridge/prospect
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+    package:
+      include:
+        - src/**
+
+  # AffiliateCallbackLambda:
+  #   handler: src/handlers/affiliate-callback-handler/handler.handleCallback
+  #   name: ${self:service.name}-affiliate-${opt:stage}
+  #   role: AffiliateCallbackRole
+  #   events:
+  #     - sqs:
+  #         arn:
+  #           Fn::GetAtt:
+  #             - AffiliateCBSQS
+  #             - Arn
+  #       batchSize: 1
+  #   package:
+  #     include:
+  #       - src/**
+  #     exclude:
+  #       - src/test/**
+
+resources:
+  Resources:
+    FacebookAPIRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+              - sts:AssumeRole
+        Path: /
+        PermissionsBoundary: !ImportValue security-iam::PermissionsBoundaryBuilderManagedPolicy
+        Policies:
+          - PolicyName: facebook-api-policy
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
