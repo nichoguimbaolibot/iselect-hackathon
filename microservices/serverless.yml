@@ -64,6 +64,7 @@ resources:
               - Effect: Allow
                 Action:
                   - dynamodb:PutItem
+                  - dynamodb:Put
                   - dynamodb:UpdateItem
                 Resource:
                   - ${cf:iselect-hackathon-datastore-${opt:stage}.DynamoDbArn}
