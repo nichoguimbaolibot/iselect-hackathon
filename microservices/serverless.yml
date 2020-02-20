@@ -38,7 +38,7 @@ functions:
         - src/**
 
   BillUploadToS3:
-    handler: src/handlers/bill-upload-api/handler.handleBillUploadToS3
+    handler: src/handlers/bill-upload/handler.handleBillUploadToS3
     name: ${self:service.name}-${opt:stage}-bill-upload-api
     role: BillUploadToS3Role
     environment:
