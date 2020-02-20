@@ -34,23 +34,6 @@ functions:
       include:
         - src/**
 
-  # AffiliateCallbackLambda:
-  #   handler: src/handlers/affiliate-callback-handler/handler.handleCallback
-  #   name: ${self:service.name}-affiliate-${opt:stage}
-  #   role: AffiliateCallbackRole
-  #   events:
-  #     - sqs:
-  #         arn:
-  #           Fn::GetAtt:
-  #             - AffiliateCBSQS
-  #             - Arn
-  #       batchSize: 1
-  #   package:
-  #     include:
-  #       - src/**
-  #     exclude:
-  #       - src/test/**
-
 resources:
   Resources:
     FacebookAPIRole:
@@ -78,3 +61,9 @@ resources:
                   - logs:CreateLogStream
                   - logs:PutLogEvents
                 Resource: arn:aws:logs:*:*:*
+              - Effect: Allow
+                Action:
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                Resource:
+                  - ${cf:iselect-hackathon-datastore-${opt:stage}.DynamoDbArn}
